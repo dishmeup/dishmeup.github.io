@@ -14,7 +14,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="dishme">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Comic+Neue:wght@300;400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&family=Shadows+Into+Light+Two&display=swap">
 <style>
 /* Layout: one column app, header + scrolling view + bottom tab bar; full-screen sheets for adding and reading a dish. Greys with one tomato accent. */
 :root {
@@ -29,8 +29,8 @@
   --accent-ink: #ffffff;
   --accent-soft: #fbdcd4;
   --ok: #2f7d4f;
-  --f-display: "Caveat", "Bradley Hand", "Segoe Print", cursive;
-  --f-ui: "Comic Neue", "Comic Sans MS", "Chalkboard SE", "Segoe UI", sans-serif;
+  --f-display: "Reenie Beanie", "Bradley Hand", "Segoe Print", cursive;
+  --f-ui: "Shadows Into Light Two", "Bradley Hand", "Segoe Print", cursive;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -44,7 +44,7 @@
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
-body { background: var(--bg); color: var(--ink); font: 400 16px/1.45 var(--f-ui); text-transform: lowercase; -webkit-tap-highlight-color: transparent; }
+body { background: var(--bg); color: var(--ink); font: 400 18px/1.4 var(--f-ui); word-spacing: -0.12em; text-transform: lowercase; -webkit-tap-highlight-color: transparent; }
 button, a, label, .btn { text-transform: lowercase; }
 input, textarea, select, .keepcase { text-transform: none; }
 b, strong { font-weight: inherit; }
@@ -57,17 +57,17 @@ button { cursor: pointer; }
 
 header.top { position: sticky; top: 0; z-index: 5; background: var(--bg); padding-top: env(safe-area-inset-top, 0px); }
 header.top .wrap { display: flex; align-items: center; gap: 10px; height: 60px; }
-.brand { display: flex; align-items: center; gap: 8px; font: 500 32px var(--f-display); letter-spacing: 0; }
+.brand { display: flex; align-items: center; gap: 8px; font: 400 38px/1 var(--f-display); letter-spacing: 0.01em; }
 .brand svg { width: 26px; height: 26px; }
 .top .spacer { flex: 1; }
 .iconbtn { width: 40px; height: 40px; border-radius: 20px; border: 0; background: var(--chip); display: grid; place-items: center; }
 .iconbtn svg { width: 20px; height: 20px; stroke: var(--ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 main { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 96px); }
-h1 { font: 500 42px/1 var(--f-display); margin: 6px 0 6px; text-wrap: balance; }
-h2 { font: 500 28px/1.1 var(--f-display); margin: 0; }
+h1 { font: 400 52px/0.95 var(--f-display); margin: 8px 0 8px; text-wrap: balance; }
+h2 { font: 400 34px/1 var(--f-display); margin: 0; }
 .sub { color: var(--muted); margin: 0 0 16px; }
-.label { font: 500 21px/1.1 var(--f-display); color: var(--muted); }
+.label { font: 400 27px/1 var(--f-display); color: var(--muted); }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
 .dcard { background: var(--card); border: 0; padding: 0; border-radius: 16px; overflow: hidden; text-align: left; display: flex; flex-direction: column; min-width: 0; }
@@ -145,7 +145,7 @@ nav.tabs .count { font-size: 10px; background: var(--accent); color: var(--accen
 
 /* groceries */
 .aisle { display: flex; flex-direction: column; gap: 2px; }
-.aisle h3 { font: 500 24px/1.1 var(--f-display); color: var(--muted); margin: 14px 0 4px; }
+.aisle h3 { font: 400 30px/1 var(--f-display); color: var(--muted); margin: 16px 0 4px; }
 .gitem { display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; background: var(--card); border-radius: 12px; }
 .gitem input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--accent); flex: none; }
 .gitem .t { flex: 1; min-width: 0; }
