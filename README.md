@@ -16,5 +16,7 @@ Open the site, then **Share → Add to Home Screen** (iPhone, Safari) or **⋮ �
 
 ## Credits
 
+- Type: titles are set in *dishme hand*, a single-stroke wobbly-pen font drawn from scratch for this app (`art/build_font.py`). Text in Figtree and DM Mono.
+
 - Menu reading: [Tesseract.js](https://github.com/naptha/tesseract.js) (Apache-2.0), loaded only when you read a menu photo.
 - Recipes and ingredient data: written for dishme.

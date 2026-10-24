@@ -4,180 +4,185 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>dishme</title>
-<meta name="description" content="Save the dishes you love when you eat out, get a best-guess recipe, and turn them into a grocery list.">
-<meta name="theme-color" content="#f0efec" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#232428" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Plates to try at home: save dishes you love eating out, get a best-guess recipe, and make one grocery list.">
+<meta name="theme-color" content="#f4f4f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1e1f22" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="dishme">
+<link rel="preload" href="dishme-hand.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400&family=Figtree:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=Figtree:wght@400&display=swap">
 <style>
-/* Layout: one column app, header + scrolling view + bottom tab bar; full-screen sheets for adding and reading a dish. Greys with one tomato accent. */
+/* Layout: a plain index page in the manner of an art-school portfolio — hand-drawn titles, text navigation,
+   thin rules, key/value rows, square-cornered photos; one butter-yellow button for the main action. */
+@font-face { font-family: "dishme hand"; src: url("dishme-hand.woff2") format("woff2"); font-display: swap; }
 :root {
   color-scheme: light;
-  --bg: #f0efec;
-  --card: #ffffff;
-  --ink: #23252b;
-  --muted: #6c6f79;
-  --line: #e2e1dd;
-  --chip: #e8e7e3;
+  --bg: #f4f4f1;
+  --ink: #333336;
+  --muted: #7b7c82;
+  --line: #d8d8d3;
+  --soft: #e9e9e5;
   --accent: #f1de98;
-  --accent-ink: #23252b;
-  --accent-soft: #f5ecc8;
-  --accent-text: #a5741c;
+  --accent-ink: #333336;
+  --accent-text: #9c6f1c;
   --sketch: 255px 16px 225px 16px / 16px 225px 16px 255px;
-  --ok: #2f7d4f;
-  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-hand: "dishme hand", "Figtree", system-ui, sans-serif;
   --f-ui: "Figtree", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #1d1e22; --card: #28292e; --ink: #efeeeb; --muted: #a2a4ad; --line: #36373d; --chip: #33343a;
-    --accent: #e3cc78; --accent-ink: #1d1e22; --accent-soft: #46402a; --accent-text: #e6c36a; --ok: #6cc08c; color-scheme: dark;
-  }
+  :root:not([data-theme="light"]) { --bg: #1e1f22; --ink: #e9e9e6; --muted: #9a9ba2; --line: #393a3f; --soft: #2a2b2f; --accent: #e3cc78; --accent-ink: #1e1f22; --accent-text: #e6c36a; color-scheme: dark; }
 }
-:root[data-theme="dark"] {
-  --bg: #1d1e22; --card: #28292e; --ink: #efeeeb; --muted: #a2a4ad; --line: #36373d; --chip: #33343a;
-  --accent: #e3cc78; --accent-ink: #1d1e22; --accent-soft: #46402a; --accent-text: #e6c36a; --ok: #6cc08c; color-scheme: dark;
-}
+:root[data-theme="dark"] { --bg: #1e1f22; --ink: #e9e9e6; --muted: #9a9ba2; --line: #393a3f; --soft: #2a2b2f; --accent: #e3cc78; --accent-ink: #1e1f22; --accent-text: #e6c36a; color-scheme: dark; }
 * { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
-body { background: var(--bg); color: var(--ink); font: 400 16px/1.45 var(--f-ui); text-transform: lowercase; -webkit-tap-highlight-color: transparent; }
-button, a, label, .btn { text-transform: lowercase; }
-input, textarea, select, .keepcase { text-transform: none; }
-b, strong { font-weight: inherit; }
-button, .btn, .tag, .badge, .chip, .label, .fab, nav.tabs button { font-weight: 400 !important; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.5 var(--f-ui); text-transform: lowercase; -webkit-tap-highlight-color: transparent; }
 button, input, textarea, select { font: inherit; color: inherit; }
+button, a, label { text-transform: lowercase; }
+input, textarea, select { text-transform: none; }
+b, strong, h1, h2, h3, th { font-weight: 400; }
 button { cursor: pointer; }
+a { color: inherit; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
-.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.mono { font: 400 12.5px/1.5 var(--f-mono); letter-spacing: 0.01em; color: var(--muted); }
 
+/* header */
 header.top { position: sticky; top: 0; z-index: 5; background: var(--bg); padding-top: env(safe-area-inset-top, 0px); }
-header.top .wrap { display: flex; align-items: center; gap: 10px; height: 60px; }
-.brand { display: flex; align-items: center; gap: 8px; font: 400 26px/1 var(--f-display); letter-spacing: -0.02em; }
-.brand .logo { width: 46px; height: 46px; color: var(--ink); margin: -6px 0 -6px -4px; }
-.top .spacer { flex: 1; }
-.iconbtn { width: 40px; height: 40px; border-radius: 20px; border: 0; background: var(--chip); display: grid; place-items: center; }
-.iconbtn svg { width: 20px; height: 20px; stroke: var(--ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+header.top .wrap { padding-block: 10px 0; }
+.bar1 { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 6px; text-decoration: none; font: 400 34px/1 var(--f-hand); }
+.brand .logo { width: 44px; height: 44px; color: var(--ink); margin-left: -4px; }
+.nav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 8px 0 10px; border-bottom: 1px solid var(--line); font: 400 13px/1.4 var(--f-mono); }
+.nav button { border: 0; background: none; padding: 4px 2px; color: var(--muted); font: inherit; }
+.nav button[aria-current="page"] { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.nav .sep { color: var(--line); }
+.nav .count { margin-left: 3px; color: var(--accent-text); }
 
-main { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 96px); }
-h1 { font: 400 32px/1.1 var(--f-display); letter-spacing: -0.02em; margin: 6px 0 6px; text-wrap: balance; }
-h2 { font: 400 22px/1.2 var(--f-display); letter-spacing: -0.01em; margin: 0; }
-.sub { color: var(--muted); margin: 0 0 16px; }
-.label { font: 400 14px/1.2 var(--f-ui); color: var(--muted); }
+main { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 40px); }
+h1 { font: 400 clamp(48px, 14vw, 96px)/0.95 var(--f-hand); margin: 28px 0 14px; text-wrap: balance; }
+h2 { font: 400 34px/1.05 var(--f-hand); margin: 0; }
+.intro { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 24px; margin-bottom: 28px; }
+.intro p { margin: 0; max-width: 34ch; color: var(--muted); }
+.rule { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding: 6px 0 14px; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-.dcard { background: var(--card); border: 0; padding: 0; border-radius: 16px; overflow: hidden; text-align: left; display: flex; flex-direction: column; min-width: 0; }
-.dcard .ph { aspect-ratio: 4 / 3; width: 100%; max-width: 100%; background: var(--chip); object-fit: cover; display: block; }
-.dcard .ph.none { display: grid; place-items: center; color: var(--muted); }
-.dcard .ph.none svg { width: 36px; height: 36px; stroke: currentColor; fill: none; stroke-width: 1.6; }
-.dcard .meta { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.dcard .nm { font-weight: 400; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.dcard .pl { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: var(--chip); color: var(--muted); width: max-content; margin-top: 4px; }
-.tag.in { background: var(--accent-soft); color: var(--ink); }
-.empty { background: var(--card); border-radius: 16px; padding: 24px 20px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+/* index of plates */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 26px 14px; }
+@media (min-width: 700px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px 20px; } }
+.dcard { background: none; border: 0; padding: 0; text-align: left; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.dcard .ph { aspect-ratio: 4 / 5; width: 100%; max-width: 100%; object-fit: cover; display: block; background: var(--soft); }
+.dcard .ph.none { display: grid; place-items: center; color: var(--muted); border: 1px dashed var(--line); background: none; }
+.dcard .ph.none svg { width: 46%; height: auto; opacity: 0.7; }
+.dcard .meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dcard .nm { font: 400 27px/1.05 var(--f-hand); overflow-wrap: anywhere; }
+.dcard .pl { font: 400 12px/1.45 var(--f-mono); color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tag { font: 400 12px/1.4 var(--f-mono); color: var(--muted); }
+.tag.in { color: var(--accent-text); }
+.tag::before { content: "("; } .tag::after { content: ")"; }
+.empty { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; border-top: 1px solid var(--line); padding-top: 16px; }
 .empty p { margin: 0; color: var(--muted); max-width: 46ch; }
 
-.fab { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
-  height: 54px; padding: 0 22px 0 16px; border-radius: var(--sketch); border: 1.6px solid var(--ink); background: var(--accent); color: var(--accent-ink);
-  font-size: 17px; display: flex; align-items: center; gap: 8px; transform: rotate(-1.5deg); box-shadow: 3px 4px 0 rgba(35, 37, 43, 0.13); }
-.fab:active { transform: rotate(-1.5deg) translate(2px, 3px); box-shadow: 1px 1px 0 rgba(35, 37, 43, 0.13); }
-.fab svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; }
-nav.tabs { position: fixed; z-index: 6; left: 0; right: 0; bottom: 0; background: var(--card); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
-nav.tabs .wrap { display: flex; }
-nav.tabs button { flex: 1; height: 60px; border: 0; background: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
-nav.tabs button svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-nav.tabs button[aria-current="page"] { color: var(--accent-text); }
-nav.tabs .count { font-size: 11px; background: var(--accent); color: var(--accent-ink); border: 1px solid var(--ink); border-radius: var(--sketch); padding: 0 5px; margin-left: 3px; }
+/* key / value rows, after solar protocol */
+.kv { margin: 0; display: grid; grid-template-columns: minmax(7.5em, 32%) 1fr; border-top: 1px solid var(--line); }
+.kv dt, .kv dd { margin: 0; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.kv dt { font: 400 12.5px/1.6 var(--f-mono); color: var(--muted); padding-right: 12px; }
+.kv dd { min-width: 0; overflow-wrap: anywhere; }
 
-.btn { height: 44px; padding: 0 16px; border-radius: 22px; border: 0; background: var(--chip); font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
-.btn.primary { background: var(--accent); color: var(--accent-ink); border: 1.5px solid var(--ink); border-radius: var(--sketch); box-shadow: 2px 3px 0 rgba(35, 37, 43, 0.12); }
-.btn.primary:active { transform: translate(1px, 2px); box-shadow: 1px 1px 0 rgba(35, 37, 43, 0.12); }
-.btn.ghost { background: transparent; border: 1px solid var(--line); }
-.btn.small { height: 34px; padding: 0 12px; font-size: 13px; }
-.btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.foot { margin-top: 48px; display: flex; flex-direction: column; gap: 14px; }
+.foot .row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* buttons */
+.btn { height: 40px; padding: 0 16px; border-radius: 20px; border: 1px solid var(--ink); background: transparent; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; font: 400 13px/1 var(--f-mono); color: var(--ink); text-decoration: none; }
+.btn.small { height: 32px; padding: 0 12px; font-size: 12px; }
+.btn.ghost { border-color: var(--line); color: var(--muted); }
+.btn.primary { height: 48px; padding: 0 22px; background: var(--accent); color: var(--accent-ink); border: 1.4px solid var(--ink); border-radius: var(--sketch); font: 400 25px/1 var(--f-hand); transform: rotate(-1.2deg); box-shadow: 2px 3px 0 rgba(30, 30, 34, 0.12); }
+.btn.primary.small { height: 38px; font-size: 21px; padding: 0 16px; }
+.btn.primary:active { transform: rotate(-1.2deg) translate(1px, 2px); box-shadow: 0 1px 0 rgba(30, 30, 34, 0.12); }
+.textbtn { border: 0; background: none; padding: 0; font: 400 13px/1.4 var(--f-mono); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
 .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
 /* sheets */
 .sheet { position: fixed; inset: 0; z-index: 20; background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .sheet .bar { position: sticky; top: 0; z-index: 2; background: var(--bg); padding-top: env(safe-area-inset-top, 0px); }
-.sheet .bar .wrap { height: 58px; display: flex; align-items: center; gap: 10px; }
-.sheet .bar h2 { flex: 1; }
-.sheet .body { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 40px); display: flex; flex-direction: column; gap: 16px; }
-.field { display: flex; flex-direction: column; gap: 6px; }
-.field input, .field textarea { width: 100%; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 11px 12px; font-size: 16px; }
-.field textarea { min-height: 84px; resize: vertical; }
-.hint { color: var(--muted); font-size: 13px; margin: 0; }
-.photo { position: relative; border-radius: 16px; overflow: hidden; background: var(--card); border: 1px dashed var(--line); aspect-ratio: 4 / 3; width: 100%; max-width: 100%; display: grid; place-items: center; }
+.sheet .bar .wrap { min-height: 54px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--line); }
+.sheet .bar .ttl { flex: 1; font: 400 13px var(--f-mono); color: var(--muted); }
+.sheet .bar .btn.primary { margin-right: 6px; }
+.back { border: 0; background: none; padding: 6px 0; font: 400 13px var(--f-mono); color: var(--ink); }
+.sheet .body { padding-top: 18px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 48px); display: flex; flex-direction: column; gap: 22px; max-width: 760px; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field .lbl { font: 400 12.5px var(--f-mono); color: var(--muted); }
+.field input, .field textarea { width: 100%; border: 0; border-bottom: 1px solid var(--ink); background: transparent; border-radius: 0; padding: 8px 0; font-size: 18px; }
+.field textarea { min-height: 70px; resize: vertical; }
+.field input:focus, .field textarea:focus { outline: none; border-bottom-width: 2px; }
+.hint { color: var(--muted); font: 400 12.5px/1.5 var(--f-mono); margin: 0; }
+.photo { position: relative; border: 1px dashed var(--line); aspect-ratio: 4 / 3; width: 100%; max-width: 100%; display: grid; place-items: center; cursor: pointer; }
 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .photo .pick { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--muted); text-align: center; padding: 16px; }
-.photo .pick svg { width: 34px; height: 34px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.photo .change { position: absolute; right: 10px; bottom: 10px; }
-.ocr { background: var(--card); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-.ocr .lines { display: flex; flex-direction: column; gap: 4px; max-height: 260px; overflow-y: auto; }
-.ocr .lines button { text-align: left; border: 0; background: var(--chip); border-radius: 10px; padding: 8px 10px; font-size: 14px; }
-.ocr .lines button.used { background: var(--accent-soft); }
-.progress { height: 6px; background: var(--chip); border-radius: 3px; overflow: hidden; }
-.progress i { display: block; height: 100%; width: 0; background: var(--accent-text); transition: width 0.2s; }
+.photo .pick b { font: 400 30px/1 var(--f-hand); color: var(--ink); }
+.photo .pick span { font: 400 12.5px var(--f-mono); }
+.photo .pick svg { width: 70px; height: auto; }
+.photo .change { position: absolute; right: 10px; bottom: 10px; background: var(--bg); }
+.ocr { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.ocr .lines { display: flex; flex-direction: column; max-height: 280px; overflow-y: auto; }
+.ocr .lines button { text-align: left; border: 0; border-bottom: 1px solid var(--line); background: none; padding: 8px 0; font-size: 15px; text-transform: none; }
+.ocr .lines button.used { color: var(--accent-text); }
+.progress { height: 2px; background: var(--line); overflow: hidden; }
+.progress i { display: block; height: 100%; width: 0; background: var(--ink); transition: width 0.2s; }
 
-.card { background: var(--card); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-.guess { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.badge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 12px; background: var(--accent-soft); }
-.ings { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-.ings li { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line); min-width: 0; }
-.ings li:last-child { border-bottom: 0; }
-.ings .q { width: 4.6em; flex: none; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 14px; }
+.card { display: flex; flex-direction: column; gap: 12px; }
+.guess { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.badge { font: 400 12.5px var(--f-mono); color: var(--accent-text); }
+.badge::before { content: "("; } .badge::after { content: ")"; }
+.ings { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.ings li { display: flex; align-items: baseline; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.ings .q { width: 6.2em; flex: none; font: 400 12.5px var(--f-mono); color: var(--muted); }
 .ings .n { flex: 1; min-width: 0; }
-.ings .n small { color: var(--muted); }
-.ings .menu { font-size: 14px; color: var(--accent-text); margin-left: 4px; }
-.ings input[type="text"] { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 6px 8px; font-size: 15px; min-width: 0; }
-.ings .qe { width: 4.4em; flex: none; }
+.ings .n small { font: 400 12px var(--f-mono); color: var(--muted); margin-left: 6px; }
+.ings .menu { font: 400 12px var(--f-mono); color: var(--accent-text); }
+.ings input[type="text"] { border: 0; border-bottom: 1px solid var(--line); background: transparent; padding: 4px 0; font-size: 16px; min-width: 0; }
+.ings .qe { width: 5.6em; flex: none; font-family: var(--f-mono) !important; font-size: 13px !important; }
 .ings .ne { flex: 1; }
-.x { width: 30px; height: 30px; border-radius: 15px; border: 0; background: var(--chip); flex: none; font-size: 16px; line-height: 1; }
-.steps { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 8px; }
-.steps textarea { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 8px; min-height: 56px; font-size: 15px; resize: vertical; }
+.x { width: 28px; height: 28px; border-radius: 14px; border: 1px solid var(--line); background: none; flex: none; font-size: 14px; line-height: 1; color: var(--muted); }
+.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 2.4em 1fr; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.steps li::before { content: counter(s, decimal-leading-zero); font: 400 12.5px/1.9 var(--f-mono); color: var(--muted); }
+.steps textarea { width: 100%; border: 0; background: transparent; padding: 0; min-height: 48px; font-size: 16px; resize: vertical; }
 .serves { display: flex; align-items: center; gap: 8px; }
-.serves button { width: 34px; height: 34px; border-radius: 17px; border: 0; background: var(--chip); font-size: 18px; }
-.serves b { min-width: 2ch; text-align: center; font-variant-numeric: tabular-nums; }
-.hero { width: 100%; max-width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px; display: block; background: var(--chip); }
+.serves button { width: 30px; height: 30px; border-radius: 15px; border: 1px solid var(--ink); background: none; font-size: 16px; line-height: 1; }
+.serves b { min-width: 2ch; text-align: center; font: 400 15px var(--f-mono); }
+.hero { width: 100%; max-width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--soft); }
+.confirm { border: 1px solid var(--ink); padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.vtitle { font: 400 clamp(46px, 12vw, 84px)/0.95 var(--f-hand); margin: 4px 0 0; overflow-wrap: anywhere; }
 
 /* groceries */
-.aisle { display: flex; flex-direction: column; gap: 2px; }
-.aisle h3 { font: 400 18px/1.2 var(--f-display); color: var(--muted); margin: 16px 0 4px; }
-.gitem { display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; background: var(--card); border-radius: 12px; }
-.gitem input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--accent-text); flex: none; }
+.inlist { display: flex; gap: 6px 14px; flex-wrap: wrap; font: 400 12.5px var(--f-mono); color: var(--muted); margin-bottom: 8px; }
+.inlist .chip { display: inline-flex; align-items: center; gap: 6px; }
+.inlist .chip button { border: 0; background: none; padding: 0 2px; color: var(--muted); font: inherit; }
+.aisle h3 { font: 400 32px/1 var(--f-hand); margin: 26px 0 6px; }
+.gitem { display: flex; align-items: baseline; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+.aisle h3 + .gitem { border-top: 1px solid var(--line); }
+.gitem input { appearance: none; -webkit-appearance: none; width: 16px; height: 16px; margin: 0; border: 1px solid var(--ink); border-radius: 2px; flex: none; position: relative; top: 2px; background: transparent; }
+.gitem input:checked { background: var(--ink); box-shadow: inset 0 0 0 3px var(--bg); }
 .gitem .t { flex: 1; min-width: 0; }
-.gitem .t b { font-weight: 400; }
-.gitem .t small { display: block; color: var(--muted); font-size: 12px; }
+.gitem .amt { font: 400 12.5px var(--f-mono); color: var(--muted); margin-left: 6px; }
+.gitem .t small { display: block; font: 400 11.5px var(--f-mono); color: var(--muted); }
 .gitem.done .t { text-decoration: line-through; color: var(--muted); }
-.inlist { display: flex; gap: 6px; flex-wrap: wrap; }
-.inlist .chip { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 6px 0 12px; border-radius: 17px; background: var(--card); font-size: 13px; font-weight: 500; }
-.inlist .chip button { width: 24px; height: 24px; border-radius: 12px; border: 0; background: var(--chip); }
-.addrow { display: flex; gap: 8px; }
-.addrow input { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 10px 12px; font-size: 16px; }
-.toast { position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 150px); background: var(--ink); color: var(--bg); padding: 9px 16px; border-radius: 18px; font-size: 14px; font-weight: 500; max-width: calc(100% - 32px); text-align: center; }
-.confirm { background: var(--accent-soft); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-.foot { margin-top: 28px; color: var(--muted); font-size: 12px; line-height: 1.5; display: flex; flex-direction: column; gap: 8px; }
-.foot a { color: inherit; }
-/* wobbly pen: headings, labels, buttons and recipe text are drawn through a slight displacement, like hand-inked lines */
-h1, h2, .brand, .aisle h3, .label, .fab, .btn, .badge, .tag { filter: url(#pen-lg); }
-.sub, .dcard .meta, nav.tabs button, .ings .n, .ings .q, .steps li, .gitem .t, .card > div, .empty p, .foot div, .hint, .inlist .chip { filter: url(#pen-sm); }
-@media (prefers-reduced-motion: reduce), print { * { filter: none !important; } }
+.addrow { display: flex; gap: 10px; align-items: flex-end; }
+.addrow input { flex: 1; min-width: 0; border: 0; border-bottom: 1px solid var(--ink); background: transparent; padding: 8px 0; font-size: 16px; border-radius: 0; }
+.addrow input:focus { outline: none; border-bottom-width: 2px; }
+.toast { position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 16px; font: 400 12.5px var(--f-mono); max-width: calc(100% - 32px); text-align: center; }
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <filter id="pen-lg" x="-5%" y="-20%" width="110%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.6" xChannelSelector="R" yChannelSelector="G"/></filter>
-  <filter id="pen-sm" x="-5%" y="-20%" width="110%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="9"/><feDisplacementMap in="SourceGraphic" scale="1.5" xChannelSelector="R" yChannelSelector="G"/></filter>
-</svg>
 <header class="top"><div class="wrap">
-  <div class="brand"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <div class="bar1"><a class="brand" href="./" aria-label="dishme home"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path d="M58.7,34.0 C58.7,36.1 58.1,38.2 57.5,40.3 C57.0,42.4 56.7,44.7 55.6,46.5 C54.4,48.3 52.3,49.6 50.6,51.1 C48.9,52.6 47.5,54.4 45.5,55.6 C43.6,56.7 41.2,57.4 38.9,57.8 C36.7,58.2 34.3,58.2 32.0,58.2 C29.7,58.2 27.2,58.5 25.0,58.0 C22.8,57.5 20.9,56.0 18.9,54.9 C16.9,53.8 14.6,53.0 13.0,51.5 C11.4,50.0 10.3,48.0 9.2,46.1 C8.1,44.2 7.2,42.3 6.6,40.3 C5.9,38.3 5.3,36.1 5.1,34.0 C4.9,31.9 4.7,29.5 5.4,27.4 C6.1,25.4 7.8,23.6 9.1,21.9 C10.4,20.1 11.7,18.3 13.2,16.7 C14.8,15.1 16.5,13.6 18.4,12.3 C20.3,11.1 22.6,9.9 24.8,9.4 C27.1,8.8 29.6,8.9 32.0,9.0 C34.4,9.2 36.6,9.7 38.9,10.2 C41.3,10.6 43.9,10.8 45.9,11.9 C47.8,13.0 48.9,15.3 50.6,16.9 C52.2,18.5 54.7,19.5 55.9,21.3 C57.1,23.1 57.3,25.5 57.8,27.7 C58.2,29.8 58.8,31.9 58.7,34.0" stroke="currentColor" stroke-width="2.1"/>
   <path d="M48.2,44.4 C47.4,45.1 45.3,47.4 43.6,48.6 C41.9,49.8 39.9,50.8 37.9,51.5 C35.8,52.2 33.4,53.0 31.3,52.8 C29.2,52.7 27.0,51.5 25.0,50.6 C23.0,49.8 20.8,49.0 19.2,47.7 C17.5,46.4 16.0,44.7 15.0,42.9 C14.1,41.1 13.6,38.9 13.4,36.9 C13.1,34.9 12.8,32.7 13.4,30.8 C13.9,28.9 15.2,27.0 16.4,25.4 C17.6,23.8 19.0,22.2 20.7,21.0 C22.3,19.7 24.3,18.7 26.3,17.9 C28.3,17.1 30.6,16.4 32.7,16.3 C34.9,16.3 37.2,17.0 39.2,17.8 C41.3,18.5 43.2,19.7 44.9,20.9 C46.6,22.2 48.3,23.7 49.4,25.4 C50.6,27.1 51.2,30.2 51.6,31.2" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>
   <path d="M41.3,34.8 C41.6,35.3 43.0,37.1 43.1,38.1 C43.2,39.1 42.6,40.1 41.6,40.6 C40.7,41.2 39.0,41.4 37.3,41.7 C35.6,41.9 33.4,42.1 31.3,41.9 C29.2,41.6 26.8,40.9 24.8,40.2 C22.8,39.4 20.6,38.5 19.4,37.5 C18.1,36.4 17.3,34.9 17.2,33.7 C17.1,32.5 18.0,31.3 18.8,30.2 C19.6,29.1 20.4,27.8 22.0,27.1 C23.5,26.4 26.2,26.3 28.1,26.1 C29.9,25.8 31.6,25.6 33.2,25.6 C34.7,25.6 36.3,25.7 37.2,26.2 C38.1,26.7 38.4,27.8 38.8,28.5 C39.1,29.2 39.4,29.8 39.3,30.4 C39.1,31.1 38.2,31.9 37.8,32.5 C37.5,33.2 37.6,33.8 37.3,34.4 C37.0,35.0 36.5,35.5 36.0,35.9 C35.6,36.3 35.1,36.5 34.6,36.7 C34.1,37.0 33.6,37.5 33.0,37.6 C32.4,37.6 31.8,37.2 31.0,37.1 C30.2,37.0 29.0,37.1 28.0,36.9 C27.1,36.6 26.2,36.1 25.5,35.5 C24.8,35.0 24.0,34.2 23.8,33.5 C23.6,32.7 23.6,31.8 24.0,30.9 C24.4,30.0 25.1,28.7 26.2,27.8 C27.3,26.9 29.0,25.9 30.7,25.4 C32.3,24.9 34.3,24.8 36.1,24.8 C37.8,24.8 39.9,24.7 41.1,25.3 C42.4,25.8 43.0,26.9 43.6,28.0 C44.2,29.1 45.0,30.5 44.9,31.9 C44.7,33.4 43.6,35.1 42.6,36.7 C41.6,38.3 40.2,40.2 38.7,41.5 C37.1,42.8 35.0,43.9 33.4,44.5 C31.7,45.0 30.0,45.0 28.6,44.8 C27.2,44.6 26.0,44.2 25.0,43.4 C24.1,42.6 23.1,41.4 22.7,40.0 C22.4,38.6 22.8,36.6 22.9,35.0 C22.9,33.3 22.7,31.5 23.0,30.1 C23.3,28.7 24.1,27.3 24.8,26.3 C25.4,25.3 26.1,24.6 26.9,24.2 C27.8,23.8 28.6,24.0 29.6,24.1 C30.6,24.3 31.9,24.3 33.0,25.1 C34.0,25.8 34.9,27.4 35.8,28.5 C36.8,29.6 37.8,30.7 38.6,31.7 C39.3,32.8 39.9,33.9 40.2,34.8 C40.5,35.7 40.8,36.8 40.4,37.4 C39.9,38.0 38.5,38.0 37.5,38.3 C36.5,38.5 35.5,38.8 34.2,38.8 C33.0,38.8 31.4,38.5 30.0,38.2 C28.7,37.9 27.1,37.5 26.0,37.0 C24.9,36.4 24.0,35.5 23.5,34.7 C22.9,34.0 22.5,33.1 22.7,32.2 C22.8,31.4 23.7,30.6 24.4,29.8 C25.1,29.0 25.7,28.2 26.6,27.6 C27.5,27.0 28.8,26.6 29.8,26.2 C30.9,25.7 32.1,25.2 33.2,25.1 C34.3,25.0 35.7,25.2 36.7,25.7 C37.7,26.2 38.3,27.3 39.0,28.2 C39.7,29.1 40.5,29.9 41.1,30.9 C41.6,31.9 42.1,33.0 42.2,34.1 C42.4,35.1 42.3,36.2 42.0,37.2 C41.7,38.1 41.3,39.1 40.4,39.8 C39.5,40.5 38.3,41.0 36.9,41.2 C35.5,41.4 33.7,41.1 32.1,40.8 C30.5,40.5 28.8,39.9 27.3,39.4 C25.7,38.8 23.9,38.3 22.8,37.5 C21.7,36.8 20.9,35.8 20.6,34.9 C20.2,34.0 20.2,33.1 20.6,32.3 C21.0,31.5 22.7,30.3 23.1,29.8" stroke="#e2a33b" stroke-width="1.7"/>
@@ -187,88 +192,94 @@ h1, h2, .brand, .aisle h3, .label, .fab, .btn, .badge, .tag { filter: url(#pen-l
   <path d="M36,27.6 l0.9,-0.4 M38.8,29.2 l0.8,0.3" stroke="#3f7d33" stroke-width="1.4"/>
   <path d="M45.5,22.5 L57,8.5" stroke="currentColor" stroke-width="2.1"/>
   <path d="M43.6,24.6 L41.2,21.6 M45.0,25.6 L42.6,22.8 M46.6,26.4 L44.4,23.8" stroke="currentColor" stroke-width="1.5"/>
-</svg>dishme</div>
-  <div class="spacer"></div>
+</svg>dishme</a><span class="mono" id="clock" aria-hidden="true"></span></div>
+  <nav class="nav" aria-label="Sections">
+    <button type="button" id="tDishes" aria-current="page">plates</button><span class="sep">·</span>
+    <button type="button" id="tList">groceries<span class="count" id="listCount" hidden></span></button><span class="sep">·</span>
+    <button type="button" id="addBtn">+ add a dish</button>
+  </nav>
 </div></header>
 
 <main class="wrap">
   <section id="vDishes">
     <h1>plates to try at home</h1>
-    <p class="sub">snap a dish and its menu line when you eat out. dishme makes a best-guess recipe you can cook at home.</p>
+    <div class="intro">
+      <p>snap a dish and its menu line when you eat out. dishme makes a best-guess recipe you can cook at home, and one grocery list.</p>
+      <button class="btn primary" id="addBtn2" type="button">+ add a dish</button>
+    </div>
+    <div class="rule"><span class="mono">index</span><span class="mono" id="countLbl"></span></div>
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" hidden>
-      <h2>No dishes yet</h2>
-      <p>Tap <b>Add a dish</b> next time something is delicious: take a photo of the plate and the menu, and dishme turns it into a recipe and a shopping list.</p>
-      <button class="btn" id="tryExample" type="button">Add two examples</button>
+      <p>nothing saved yet. next time something is delicious, photograph the plate and the menu line, and dishme turns it into a recipe and a shopping list.</p>
+      <button class="btn" id="tryExample" type="button">add two examples</button>
     </div>
     <div class="foot">
-      <div class="row"><button class="btn small ghost" id="exportBtn" type="button">Back up my dishes</button><label class="btn small ghost">Restore a backup<input id="importFile" type="file" accept="application/json" hidden></label></div>
-      <div>Everything stays on this phone; nothing is uploaded. Recipes are starting points to adjust to taste. Menu reading runs on your device with <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener">Tesseract.js</a>.</div>
+      <dl class="kv">
+        <dt>stored</dt><dd>on this phone only, nothing uploaded</dd>
+        <dt>menus read</dt><dd>on your device, with <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener">tesseract.js</a></dd>
+        <dt>recipes</dt><dd>starting points; adjust to taste</dd>
+        <dt>accounts, ads</dt><dd>none</dd>
+      </dl>
+      <div class="row"><button class="btn small ghost" id="exportBtn" type="button">back up my dishes</button><label class="btn small ghost">restore a backup<input id="importFile" type="file" accept="application/json" hidden></label></div>
     </div>
   </section>
 
   <section id="vList" hidden>
-    <h1>Groceries</h1>
-    <p class="sub" id="listSub">Ingredients for the dishes you've added, grouped by aisle.</p>
+    <h1>groceries</h1>
+    <div class="intro"><p id="listSub">ingredients for the dishes you've added, grouped by aisle.</p></div>
     <div class="inlist" id="inlist"></div>
     <div id="aisles"></div>
-    <div class="addrow" style="margin-top:14px"><input id="extraIn" type="text" placeholder="Add an item, like coffee" aria-label="Add an item"><button class="btn" id="extraAdd" type="button">Add</button></div>
-    <div class="row" style="margin-top:16px">
-      <button class="btn primary" id="copyBtn" type="button"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>Copy list</button>
-      <button class="btn" id="shareBtn" type="button" hidden><svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>Share</button>
-      <a class="btn" href="https://www.instacart.com/" target="_blank" rel="noopener">Open Instacart</a>
-      <button class="btn ghost" id="clearDone" type="button">Clear ticked</button>
+    <div class="addrow" style="margin-top:22px"><input id="extraIn" type="text" placeholder="add an item, like coffee" aria-label="Add an item"><button class="btn small" id="extraAdd" type="button">add</button></div>
+    <div class="row" style="margin-top:26px">
+      <button class="btn primary small" id="copyBtn" type="button">copy list</button>
+      <button class="btn" id="shareBtn" type="button" hidden>share</button>
+      <a class="btn" href="https://www.instacart.com/" target="_blank" rel="noopener">open instacart ↗</a>
+      <button class="btn ghost" id="clearDone" type="button">clear ticked</button>
     </div>
-    <p class="hint" style="margin-top:10px">Copy the list, then paste it into Instacart's list, your store's app or Notes.</p>
+    <p class="hint" style="margin-top:12px">copy the list, then paste it into instacart's list, your store's app or notes.</p>
   </section>
 </main>
 
-<button class="fab" id="addBtn" type="button"><svg viewBox="0 0 24 24"><path d="M12.2 4.4c-.4 3.1.3 6.2-.1 9.6-.1 2 .2 3.9.1 5.6"/><path d="M4.6 12.4c2.6.3 5.4-.4 8.1-.1 2.3.2 4.4-.2 6.7.1"/></svg>add a dish</button>
-<nav class="tabs"><div class="wrap">
-  <button type="button" id="tDishes" aria-current="page"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg>Dishes</button>
-  <button type="button" id="tList"><svg viewBox="0 0 24 24"><path d="M5 7h2l2 10h9l2-7H8"/><circle cx="10" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg><span>Groceries<span class="count" id="listCount" hidden></span></span></button>
-</div></nav>
-
 <!-- add / edit -->
 <section class="sheet" id="sEdit" hidden aria-label="Add a dish">
-  <div class="bar"><div class="wrap"><button class="iconbtn" id="editClose" type="button" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button><h2 id="editTitle">Add a dish</h2><button class="btn primary small" id="saveBtn" type="button">Save</button></div></div>
+  <div class="bar"><div class="wrap"><button class="back" id="editClose" type="button">× close</button><span class="ttl" id="editTitle">add a dish</span><button class="btn primary small" id="saveBtn" type="button">save</button></div></div>
   <div class="wrap body">
     <label class="photo" id="photoBox">
       <input id="photoIn" type="file" accept="image/*" capture="environment" hidden>
-      <span class="pick" id="photoPick"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><b>Photo of the dish</b><span>Tap to take or choose one</span></span>
+      <span class="pick" id="photoPick"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.6"><path d="M58.7,34 C58.6,47 47,57.9 32,58.2 C17,58.4 5.3,47.6 5.1,34 C4.9,20.5 16.6,9.1 32,9 C47.4,8.9 58.9,20.4 58.7,34"/><path d="M48.2,44.4 C44,49.6 38.1,52.8 31.3,52.8 C21,52.7 13.2,44.6 13.4,34.9 C13.6,25.2 22.2,16.4 32.7,16.3 C40.6,16.2 47.6,21.4 51.6,31.2" opacity=".55"/></svg><b>photo of the dish</b><span>tap to take or choose one</span></span>
       <img id="photoImg" alt="" hidden>
-      <span class="btn small change" id="photoChange" hidden>Change</span>
+      <span class="btn small change" id="photoChange" hidden>change</span>
     </label>
-    <div class="field"><span class="label">Dish name</span><input id="nameIn" type="text" list="recipeNames" placeholder="e.g. Spicy rigatoni" autocomplete="off"><datalist id="recipeNames"></datalist></div>
+    <div class="field"><span class="lbl">dish name</span><input id="nameIn" type="text" list="recipeNames" placeholder="e.g. spicy rigatoni" autocomplete="off"><datalist id="recipeNames"></datalist></div>
     <div class="field">
-      <span class="label">Menu description</span>
-      <textarea id="menuIn" placeholder="Copy what the menu says, e.g. rigatoni, calabrian chili, vodka sauce, parmigiano, basil"></textarea>
-      <div class="row"><label class="btn small"><svg viewBox="0 0 24 24"><path d="M4 7V5h4M20 7V5h-4M4 17v2h4M20 17v2h-4M7 10h10M7 14h7"/></svg>Read a menu photo<input id="menuPhoto" type="file" accept="image/*" capture="environment" hidden></label><span class="hint">Runs on your phone.</span></div>
+      <span class="lbl">menu description</span>
+      <textarea id="menuIn" placeholder="what the menu says, e.g. rigatoni, calabrian chili, vodka sauce, parmigiano, basil"></textarea>
+      <div class="row" style="margin-top:8px"><label class="btn small">read a menu photo<input id="menuPhoto" type="file" accept="image/*" capture="environment" hidden></label><span class="hint">runs on your phone</span></div>
       <div class="ocr" id="ocrBox" hidden>
         <div class="progress"><i id="ocrBar"></i></div>
-        <p class="hint" id="ocrMsg">Reading the menu…</p>
+        <p class="hint" id="ocrMsg">reading the menu…</p>
         <div class="lines" id="ocrLines"></div>
       </div>
     </div>
-    <div class="field"><span class="label">Where you had it</span><input id="placeIn" type="text" placeholder="Restaurant, city (optional)" autocomplete="off"></div>
-    <button class="btn primary" id="guessBtn" type="button">Guess the recipe</button>
+    <div class="field"><span class="lbl">where you had it</span><input id="placeIn" type="text" placeholder="restaurant, city (optional)" autocomplete="off"></div>
+    <div><button class="btn" id="guessBtn" type="button">guess the recipe</button></div>
     <div id="recipeEd" hidden class="card">
-      <div class="guess"><h2 style="flex:1">Recipe</h2><span class="badge" id="guessBadge"></span></div>
+      <div class="guess"><h2>recipe</h2><span class="badge" id="guessBadge"></span></div>
       <p class="hint" id="guessNote"></p>
-      <div class="serves"><span class="label" style="flex:1">Serves</span><button type="button" id="sMinus" aria-label="Fewer servings">−</button><b id="sNum">2</b><button type="button" id="sPlus" aria-label="More servings">+</button></div>
-      <span class="label">Ingredients</span>
+      <dl class="kv"><dt>serves</dt><dd><div class="serves"><button type="button" id="sMinus" aria-label="Fewer servings">−</button><b id="sNum">2</b><button type="button" id="sPlus" aria-label="More servings">+</button></div></dd></dl>
+      <h2>ingredients</h2>
       <ul class="ings" id="ingEd"></ul>
-      <div class="addrow"><input id="ingNew" type="text" placeholder="Add an ingredient" aria-label="Add an ingredient"><button class="btn small" id="ingAdd" type="button">Add</button></div>
-      <span class="label">Method</span>
+      <div class="addrow"><input id="ingNew" type="text" placeholder="add an ingredient, e.g. 2 tbsp capers" aria-label="Add an ingredient"><button class="btn small" id="ingAdd" type="button">add</button></div>
+      <h2>method</h2>
       <ol class="steps" id="stepEd"></ol>
-      <button class="btn small ghost" id="stepAdd" type="button" style="align-self:flex-start">Add a step</button>
+      <div><button class="textbtn" id="stepAdd" type="button">+ add a step</button></div>
     </div>
   </div>
 </section>
 
 <!-- view a dish -->
 <section class="sheet" id="sView" hidden aria-label="Dish">
-  <div class="bar"><div class="wrap"><button class="iconbtn" id="viewClose" type="button" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><h2></h2><button class="btn small" id="editBtn" type="button">Edit</button></div></div>
+  <div class="bar"><div class="wrap"><button class="back" id="viewClose" type="button">← plates</button><span class="ttl"></span><button class="btn small" id="editBtn" type="button">edit</button></div></div>
   <div class="wrap body" id="viewBody"></div>
 </section>
 
@@ -385,11 +396,10 @@ function show(view) {
   $('vDishes').hidden = view !== 'dishes'; $('vList').hidden = view !== 'list';
   $('tDishes').toggleAttribute('aria-current', view === 'dishes'); $('tList').toggleAttribute('aria-current', view === 'list');
   if (view === 'dishes') $('tDishes').setAttribute('aria-current', 'page'); else $('tList').setAttribute('aria-current', 'page');
-  $('addBtn').hidden = view !== 'dishes';
   window.scrollTo(0, 0);
   if (view === 'list') renderList();
 }
-const PLATE = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg>';
+const PLATE = '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.6"><path d="M58.7,34 C58.6,47 47,57.9 32,58.2 C17,58.4 5.3,47.6 5.1,34 C4.9,20.5 16.6,9.1 32,9 C47.4,8.9 58.9,20.4 58.7,34"/><path d="M48.2,44.4 C44,49.6 38.1,52.8 31.3,52.8 C21,52.7 13.2,44.6 13.4,34.9 C13.6,25.2 22.2,16.4 32.7,16.3 C40.6,16.2 47.6,21.4 51.6,31.2" opacity=".55"/></svg>';
 function renderDishes() {
   const g = $('grid'); g.textContent = '';
   const ds = DISHES.slice().sort((a, b) => b.date - a.date);
@@ -401,14 +411,15 @@ function renderDishes() {
     else { const ph = el('div', 'ph none'); ph.innerHTML = PLATE; b.appendChild(ph); }
     const m = el('div', 'meta');
     m.append(el('span', 'nm', d.name || 'Untitled dish'), el('span', 'pl', [d.place, new Date(d.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })].filter(Boolean).join(' · ')));
-    if (META.list[d.id]) m.appendChild(el('span', 'tag in', 'In groceries'));
-    if (d.example) m.appendChild(el('span', 'tag', 'Example'));
+    if (META.list[d.id]) m.appendChild(el('span', 'tag in', 'in groceries'));
+    if (d.example) m.appendChild(el('span', 'tag', 'example'));
     b.appendChild(m);
     b.addEventListener('click', () => openView(d.id));
     g.appendChild(b);
   }
   const n = Object.keys(META.list).filter((id) => DISHES.some((d) => d.id === id)).length;
-  $('listCount').hidden = !n; $('listCount').textContent = n;
+  $('listCount').hidden = !n; $('listCount').textContent = '(' + n + ')';
+  $('countLbl').textContent = ds.length ? ds.length + (ds.length === 1 ? ' plate' : ' plates') : '';
 }
 
 /* ---- view a dish ---- */
@@ -419,26 +430,29 @@ function openView(id) {
   const body = $('viewBody'); body.textContent = '';
   const u = photoURL(d);
   if (u) { const im = el('img', 'hero'); im.src = u; im.alt = d.name; body.appendChild(im); }
-  const head = el('div'); head.append(el('h1', null, d.name || 'Untitled dish'));
-  head.appendChild(el('p', 'sub', [d.place, new Date(d.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })].filter(Boolean).join(' · ')));
-  body.appendChild(head);
-  if (d.menu) { const c = el('div', 'card'); c.append(el('span', 'label', 'On the menu'), el('div', null, d.menu)); body.appendChild(c); }
+  body.appendChild(el('div', 'vtitle', d.name || 'untitled dish'));
+  const kv = el('dl', 'kv');
+  const row = (k, v) => { if (!v) return; kv.append(el('dt', null, k)); const dd = el('dd'); if (typeof v === 'string') dd.textContent = v; else dd.appendChild(v); kv.appendChild(dd); };
+  row('where', d.place);
+  row('when', new Date(d.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }));
+  row('on the menu', d.menu);
+  row('recipe', d.recipe.how === 'close' ? 'based on a classic ' + d.recipe.base.toLowerCase() : 'best guess from the menu');
+  if (d.example) row('note', 'an example; delete it whenever you like');
+  body.appendChild(kv);
   const inList = !!META.list[d.id];
   const act = el('div', 'row');
-  const addB = el('button', 'btn ' + (inList ? '' : 'primary'), inList ? 'In groceries ✓' : 'Add to groceries'); addB.type = 'button';
+  const addB = el('button', 'btn ' + (inList ? '' : 'primary'), inList ? 'in groceries ✓' : '+ add to groceries'); addB.type = 'button';
   addB.addEventListener('click', async () => { if (META.list[d.id]) delete META.list[d.id]; else META.list[d.id] = d.recipe.serves; await putMeta(META); renderDishes(); openView(d.id); toast(META.list[d.id] ? 'Added to groceries' : 'Removed from groceries'); });
   act.appendChild(addB); body.appendChild(act);
   // recipe
   let serves = d.recipe.serves || 2;
   const rc = el('div', 'card');
-  const top = el('div', 'guess'); top.append(el('h2', null, 'Recipe'));
-  if (d.recipe.base) top.appendChild(el('span', 'badge', d.recipe.how === 'close' ? 'Based on ' + d.recipe.base.toLowerCase() : 'Best guess'));
-  rc.appendChild(top);
-  const sv = el('div', 'serves'); const sl = el('span', 'label', 'Serves'); sl.style.flex = '1';
+  const top = el('div', 'guess'); top.append(el('h2', null, 'ingredients'));
+  const sv = el('div', 'serves'); sv.style.marginLeft = 'auto';
   const minus = el('button', null, '−'), num = el('b', null, String(serves)), plus = el('button', null, '+');
   minus.type = plus.type = 'button'; minus.setAttribute('aria-label', 'Fewer servings'); plus.setAttribute('aria-label', 'More servings');
-  sv.append(sl, minus, num, plus); rc.appendChild(sv);
-  rc.appendChild(el('span', 'label', 'Ingredients'));
+  sv.append(el('span', 'mono', 'serves'), minus, num, plus); top.appendChild(sv);
+  rc.appendChild(top);
   const ul = el('ul', 'ings'); rc.appendChild(ul);
   const drawIngs = () => {
     ul.textContent = ''; num.textContent = serves;
@@ -452,7 +466,7 @@ function openView(id) {
   minus.addEventListener('click', () => { if (serves > 1) { serves--; drawIngs(); } });
   plus.addEventListener('click', () => { serves++; drawIngs(); });
   drawIngs();
-  rc.appendChild(el('span', 'label', 'Method'));
+  rc.appendChild(el('h2', null, 'method'));
   const ol = el('ol', 'steps'); for (const s of d.recipe.steps) ol.appendChild(el('li', null, s)); rc.appendChild(ol);
   body.appendChild(rc);
   // delete
@@ -627,8 +641,8 @@ function renderList() {
   const inl = $('inlist'); inl.textContent = '';
   const entries = Object.entries(META.list).filter(([id]) => DISHES.some((d) => d.id === id));
   for (const [id, serves] of entries) {
-    const d = DISHES.find((x) => x.id === id), c = el('span', 'chip', `${d.name} · ${serves}`);
-    const x = el('button', null, '×'); x.type = 'button'; x.setAttribute('aria-label', 'Remove ' + d.name + ' from groceries');
+    const d = DISHES.find((x) => x.id === id), c = el('span', 'chip', `${d.name.toLowerCase()} ×${serves}`);
+    const x = el('button', null, '(remove)'); x.type = 'button'; x.setAttribute('aria-label', 'Remove ' + d.name + ' from groceries');
     x.addEventListener('click', async () => { delete META.list[id]; await putMeta(META); renderList(); renderDishes(); });
     c.appendChild(x); inl.appendChild(c);
   }
@@ -642,7 +656,7 @@ function renderList() {
       const cb = el('input'); cb.type = 'checkbox'; cb.checked = !!META.done[it.key];
       cb.addEventListener('change', async () => { if (cb.checked) META.done[it.key] = true; else delete META.done[it.key]; row.classList.toggle('done', cb.checked); await putMeta(META); });
       const t = el('span', 't'); const b = el('b', null, it.name); t.appendChild(b);
-      const amt = amountText(it); if (amt) t.append(' · ' + amt);
+      const amt = amountText(it); if (amt) t.appendChild(el('span', 'amt', amt));
       if (it.from.length) t.appendChild(el('small', null, it.from.join(', ')));
       row.append(cb, t); sec.appendChild(row);
     }
@@ -699,6 +713,10 @@ function toast(m) { const t = $('toast'); t.textContent = m; t.hidden = false; c
 $('tDishes').addEventListener('click', () => show('dishes'));
 $('tList').addEventListener('click', () => show('list'));
 $('addBtn').addEventListener('click', () => openEdit(null));
+$('addBtn2').addEventListener('click', () => openEdit(null));
+const clockFmt = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', hour12: false });
+function tick() { $('clock').textContent = clockFmt.format(new Date()) + ' · ' + new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric' }).toLowerCase(); }
+tick(); setInterval(tick, 30000);
 $('recipeNames').append(...D.RECIPES.map((r) => { const o = document.createElement('option'); o.value = r.name; return o; }));
 async function addExamples() {
   const ex = [
