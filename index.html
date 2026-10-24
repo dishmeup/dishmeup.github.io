@@ -14,7 +14,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="dishme">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Comic+Neue:wght@300;400&display=swap">
 <style>
 /* Layout: one column app, header + scrolling view + bottom tab bar; full-screen sheets for adding and reading a dish. Greys with one tomato accent. */
 :root {
@@ -29,8 +29,8 @@
   --accent-ink: #ffffff;
   --accent-soft: #fbdcd4;
   --ok: #2f7d4f;
-  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
-  --f-ui: "Figtree", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --f-display: "Caveat", "Bradley Hand", "Segoe Print", cursive;
+  --f-ui: "Comic Neue", "Comic Sans MS", "Chalkboard SE", "Segoe UI", sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -44,7 +44,11 @@
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
-body { background: var(--bg); color: var(--ink); font: 15px/1.45 var(--f-ui); -webkit-tap-highlight-color: transparent; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.45 var(--f-ui); text-transform: lowercase; -webkit-tap-highlight-color: transparent; }
+button, a, label, .btn { text-transform: lowercase; }
+input, textarea, select, .keepcase { text-transform: none; }
+b, strong { font-weight: inherit; }
+button, .btn, .tag, .badge, .chip, .label, .fab, nav.tabs button { font-weight: 400 !important; }
 button, input, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; }
 [hidden] { display: none !important; }
@@ -53,17 +57,17 @@ button { cursor: pointer; }
 
 header.top { position: sticky; top: 0; z-index: 5; background: var(--bg); padding-top: env(safe-area-inset-top, 0px); }
 header.top .wrap { display: flex; align-items: center; gap: 10px; height: 60px; }
-.brand { display: flex; align-items: center; gap: 8px; font: 700 23px var(--f-display); letter-spacing: -0.02em; }
+.brand { display: flex; align-items: center; gap: 8px; font: 500 32px var(--f-display); letter-spacing: 0; }
 .brand svg { width: 26px; height: 26px; }
 .top .spacer { flex: 1; }
 .iconbtn { width: 40px; height: 40px; border-radius: 20px; border: 0; background: var(--chip); display: grid; place-items: center; }
 .iconbtn svg { width: 20px; height: 20px; stroke: var(--ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 main { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 96px); }
-h1 { font: 700 28px/1.1 var(--f-display); letter-spacing: -0.02em; margin: 6px 0 4px; text-wrap: balance; }
-h2 { font: 700 19px/1.2 var(--f-display); letter-spacing: -0.01em; margin: 0; }
+h1 { font: 500 42px/1 var(--f-display); margin: 6px 0 6px; text-wrap: balance; }
+h2 { font: 500 28px/1.1 var(--f-display); margin: 0; }
 .sub { color: var(--muted); margin: 0 0 16px; }
-.label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+.label { font: 500 21px/1.1 var(--f-display); color: var(--muted); }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
 .dcard { background: var(--card); border: 0; padding: 0; border-radius: 16px; overflow: hidden; text-align: left; display: flex; flex-direction: column; min-width: 0; }
@@ -71,7 +75,7 @@ h2 { font: 700 19px/1.2 var(--f-display); letter-spacing: -0.01em; margin: 0; }
 .dcard .ph.none { display: grid; place-items: center; color: var(--muted); }
 .dcard .ph.none svg { width: 36px; height: 36px; stroke: currentColor; fill: none; stroke-width: 1.6; }
 .dcard .meta { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.dcard .nm { font-weight: 600; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.dcard .nm { font-weight: 400; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .dcard .pl { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: var(--chip); color: var(--muted); width: max-content; margin-top: 4px; }
 .tag.in { background: var(--accent-soft); color: var(--ink); }
@@ -127,7 +131,7 @@ nav.tabs .count { font-size: 10px; background: var(--accent); color: var(--accen
 .ings .q { width: 4.6em; flex: none; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 14px; }
 .ings .n { flex: 1; min-width: 0; }
 .ings .n small { color: var(--muted); }
-.ings .menu { font-size: 11px; color: var(--accent); font-weight: 600; margin-left: 4px; }
+.ings .menu { font-size: 12px; color: var(--accent); margin-left: 4px; }
 .ings input[type="text"] { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 6px 8px; font-size: 15px; min-width: 0; }
 .ings .qe { width: 4.4em; flex: none; }
 .ings .ne { flex: 1; }
@@ -141,11 +145,11 @@ nav.tabs .count { font-size: 10px; background: var(--accent); color: var(--accen
 
 /* groceries */
 .aisle { display: flex; flex-direction: column; gap: 2px; }
-.aisle h3 { font: 600 13px var(--f-ui); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 14px 0 4px; }
+.aisle h3 { font: 500 24px/1.1 var(--f-display); color: var(--muted); margin: 14px 0 4px; }
 .gitem { display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; background: var(--card); border-radius: 12px; }
 .gitem input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--accent); flex: none; }
 .gitem .t { flex: 1; min-width: 0; }
-.gitem .t b { font-weight: 600; }
+.gitem .t b { font-weight: 400; }
 .gitem .t small { display: block; color: var(--muted); font-size: 12px; }
 .gitem.done .t { text-decoration: line-through; color: var(--muted); }
 .inlist { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -167,8 +171,8 @@ nav.tabs .count { font-size: 10px; background: var(--accent); color: var(--accen
 
 <main class="wrap">
   <section id="vDishes">
-    <h1>Dishes you loved</h1>
-    <p class="sub">Snap a dish and its menu line when you eat out. dishme makes a best-guess recipe you can cook at home.</p>
+    <h1>plates to try at home</h1>
+    <p class="sub">snap a dish and its menu line when you eat out. dishme makes a best-guess recipe you can cook at home.</p>
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" hidden>
       <h2>No dishes yet</h2>
@@ -626,7 +630,7 @@ function renderList() {
 }
 function listText() {
   const items = listItems().filter((i) => !META.done[i.key]); const out = [];
-  for (const a of AISLE_ORDER) { const its = items.filter((i) => i.aisle === a); if (!its.length) continue; out.push(a.toUpperCase()); for (const it of its) { const amt = amountText(it); out.push('- ' + it.name + (amt ? ' (' + amt + ')' : '')); } out.push(''); }
+  for (const a of AISLE_ORDER) { const its = items.filter((i) => i.aisle === a); if (!its.length) continue; out.push(a.toLowerCase() + ':'); for (const it of its) { const amt = amountText(it); out.push('- ' + it.name + (amt ? ' (' + amt + ')' : '')); } out.push(''); }
   return out.join('\n').trim();
 }
 $('extraAdd').addEventListener('click', addExtra);

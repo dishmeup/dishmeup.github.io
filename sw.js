@@ -1,5 +1,5 @@
 // dishme service worker: the app and its recipe data work offline; the menu reader is cached after first use.
-const SHELL = 'dishme-v1';
+const SHELL = 'dishme-v2';
 const FILES = ['./', './index.html', './data.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(SHELL).then((c) => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((k) => Promise.all(k.filter((x) => x !== SHELL).map((x) => caches.delete(x)))).then(() => self.clients.claim())); });
